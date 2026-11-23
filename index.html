@@ -1,0 +1,836 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Мой задачник 🌸</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg1: #fdf2fb; --bg2: #f3edff;
+  --card: #ffffff; --ink: #4a1d5e; --muted: #8e6fa3; --line: #ecdcf5;
+  --pink: #ec4899; --fuchsia: #c026d3; --violet: #7c3aed; --lilac: #ede4ff; --rose: #fde4f2;
+  --red: #e11d48; --green: #16a34a;
+  --shadow: 0 6px 20px rgba(124, 58, 237, .10);
+  --r: 18px;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  font-family: 'Nunito', system-ui, -apple-system, sans-serif; color: var(--ink); font-size: 15px;
+  background: linear-gradient(160deg, var(--bg1) 0%, var(--bg2) 55%, #fbeefe 100%) fixed; min-height: 100vh;
+}
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+.hand { font-family: 'Caveat', cursive; }
+.wrap { max-width: 1400px; margin: 0 auto; padding: 16px 16px 80px; }
+
+/* ---------- Шапка ---------- */
+header.top { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; position: relative; }
+.logo { font-family: 'Caveat', cursive; font-size: 42px; font-weight: 700; line-height: 1;
+  background: linear-gradient(90deg, var(--fuchsia), var(--violet)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.logo-em { font-size: 30px; margin-left: -6px; }
+.today { color: var(--muted); font-weight: 600; }
+.spacer { flex: 1; }
+.status { font-size: 13px; padding: 6px 12px; border-radius: 999px; background: #fff; box-shadow: var(--shadow); white-space: nowrap; }
+.status.bad { background: #ffe4e9; color: var(--red); }
+.ghostbtn { background: transparent; border: 1.5px solid var(--line); border-radius: 999px; padding: 6px 12px; color: var(--muted); font-weight: 700; }
+.ghostbtn:hover { border-color: #d8b4fe; color: var(--violet); }
+.deco { position: absolute; right: 0; top: -6px; font-size: 22px; opacity: .55; pointer-events: none; letter-spacing: 6px; }
+
+.tabs { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+.tab { border: none; background: rgba(255,255,255,.7); padding: 10px 18px; border-radius: 999px; font-weight: 800; color: var(--muted); box-shadow: var(--shadow); }
+.tab.on { background: linear-gradient(90deg, var(--pink), var(--violet)); color: #fff; }
+
+.toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+.seg { display: inline-flex; background: #fff; border-radius: 999px; padding: 3px; box-shadow: var(--shadow); }
+.seg button { border: none; background: transparent; padding: 7px 14px; border-radius: 999px; font-weight: 700; color: var(--muted); }
+.seg button.on { background: var(--lilac); color: var(--violet); }
+.btn { border: none; border-radius: 999px; padding: 9px 16px; font-weight: 800; background: linear-gradient(90deg, var(--pink), var(--fuchsia)); color: #fff; box-shadow: 0 4px 14px rgba(236,72,153,.3); }
+.btn.soft { background: #fff; color: var(--violet); box-shadow: var(--shadow); }
+.btn.danger { background: #fff; color: var(--red); box-shadow: none; border: 1.5px solid #fecdd3; }
+.btn:disabled { opacity: .5; }
+
+/* ---------- Блоки людей ---------- */
+.person { background: rgba(255,255,255,.75); border-radius: var(--r); box-shadow: var(--shadow); margin-bottom: 12px; overflow: hidden;
+  border-left: 6px solid var(--pc, var(--pink)); }
+.phead { display: flex; align-items: center; gap: 10px; width: 100%; border: none; background: transparent; padding: 14px 16px; text-align: left; }
+.phead .em { font-size: 24px; }
+.phead .nm { font-family: 'Caveat', cursive; font-size: 30px; font-weight: 700; color: var(--pc, var(--ink)); line-height: 1; }
+.phead .cnt { font-size: 13px; font-weight: 700; color: var(--muted); background: var(--lilac); padding: 3px 10px; border-radius: 999px; }
+.phead .ovd { font-size: 13px; font-weight: 800; color: var(--red); background: #ffe4e9; padding: 3px 10px; border-radius: 999px; }
+.phead .chev { margin-left: auto; font-size: 18px; color: var(--muted); transition: transform .2s; }
+.person.open .chev { transform: rotate(90deg); }
+.phead .gone { font-size: 12px; color: var(--muted); font-style: italic; }
+
+.board { display: grid; grid-template-columns: repeat(5, minmax(215px, 1fr)); gap: 10px; padding: 0 12px 14px; overflow-x: auto;
+  scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; }
+.col { background: linear-gradient(180deg, #fbf5ff, #fdf2fb); border-radius: 14px; padding: 8px; display: flex; flex-direction: column; min-height: 120px; scroll-snap-align: start; }
+.col[data-stage="done"] { background: linear-gradient(180deg, #f0fdf4, #fbf5ff); }
+.col[data-stage="fail"] { background: linear-gradient(180deg, #fff1f4, #fbf5ff); }
+.colhead { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 13.5px; padding: 4px 4px 8px; }
+.colhead span { color: var(--muted); font-weight: 700; }
+.cards { flex: 1; display: flex; flex-direction: column; gap: 8px; min-height: 40px; }
+.empty { text-align: center; color: #c4a7d8; font-size: 13px; padding: 10px 4px; border: 1.5px dashed #ead9f6; border-radius: 12px; }
+.add { margin-top: 8px; border: none; background: transparent; color: var(--muted); font-weight: 700; padding: 6px; border-radius: 10px; text-align: left; }
+.add:hover { background: rgba(255,255,255,.8); color: var(--fuchsia); }
+
+.card { background: var(--card); border-radius: 12px; padding: 10px 11px; box-shadow: 0 2px 8px rgba(124,58,237,.08); border: 1.5px solid transparent;
+  cursor: grab; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; touch-action: manipulation; }
+.card:hover { border-color: #ead9f6; }
+.card .tt { font-weight: 700; line-height: 1.3; word-break: break-word; }
+.card .meta { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 7px; font-size: 12px; }
+.chip { background: var(--lilac); color: var(--violet); border-radius: 999px; padding: 2px 8px; font-weight: 700; white-space: nowrap; }
+.chip.pink { background: var(--rose); color: #be185d; }
+.chip.red { background: #ffe4e9; color: var(--red); }
+.chip.grey { background: #f4eef8; color: var(--muted); }
+.card .why { font-size: 12.5px; color: #9f1239; margin-top: 6px; }
+.card.overdue { border-color: #fb7185; }
+.card.pending { opacity: .8; }
+.card.pending::after { content: ' ⏳'; }
+.card.dragging { display: none; }
+.ghost { position: fixed; z-index: 1000; pointer-events: none; transform: rotate(2deg); box-shadow: 0 14px 30px rgba(124,58,237,.3); opacity: .95; }
+.placeholder { border: 2px dashed #e9a8f5; border-radius: 12px; background: rgba(253, 230, 250, .6); }
+body.is-dragging, body.is-dragging * { cursor: grabbing !important; user-select: none; -webkit-user-select: none; }
+
+/* ---------- Список ---------- */
+.filters { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+.filters select { border: 1.5px solid var(--line); border-radius: 999px; padding: 7px 12px; background: #fff; font-weight: 600; }
+.filters label { display: inline-flex; gap: 6px; align-items: center; font-weight: 600; color: var(--muted); }
+.group { background: rgba(255,255,255,.8); border-radius: var(--r); box-shadow: var(--shadow); margin-bottom: 12px; padding: 6px 0 4px; }
+.group h3 { font-family: 'Caveat', cursive; font-size: 26px; margin: 4px 16px 4px; color: var(--violet); }
+.group h3.red { color: var(--red); }
+.row { display: grid; grid-template-columns: 120px minmax(220px, 1fr) 46px 150px 90px 100px minmax(140px, .8fr); gap: 10px; padding: 9px 16px; align-items: center;
+  border-top: 1px solid #f5ecfa; cursor: pointer; }
+.row:hover { background: #fdf7ff; }
+.row.head { cursor: default; font-size: 12px; color: var(--muted); font-weight: 800; text-transform: uppercase; letter-spacing: .03em; border-top: none; }
+.row.head:hover { background: transparent; }
+.row .tt { font-weight: 700; }
+.row .small { font-size: 13px; color: var(--muted); }
+.row.overdue .dl { color: var(--red); font-weight: 800; }
+.pill { display: inline-flex; gap: 4px; align-items: center; border-radius: 999px; padding: 3px 10px; font-weight: 800; font-size: 13px; color: #fff; background: var(--pc, var(--pink)); white-space: nowrap; }
+.lbl { display: none; color: var(--muted); font-size: 12px; font-weight: 700; }
+
+/* ---------- Идеи ---------- */
+.dept { background: rgba(255,255,255,.75); border-radius: var(--r); box-shadow: var(--shadow); margin-bottom: 12px; overflow: hidden; }
+.dhead { display: flex; align-items: center; gap: 10px; padding: 12px 16px; }
+.dhead button.t { border: none; background: transparent; display: flex; gap: 10px; align-items: center; padding: 0; text-align: left; flex: 1; }
+.dhead .nm { font-family: 'Caveat', cursive; font-size: 30px; font-weight: 700; color: var(--violet); line-height: 1; }
+.dhead .em { font-size: 24px; }
+.notes { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px; padding: 0 16px 16px; }
+.note { border-radius: 4px 16px 16px 16px; padding: 14px 14px 12px; box-shadow: 0 4px 12px rgba(124,58,237,.10); cursor: pointer; position: relative; min-height: 110px;
+  display: flex; flex-direction: column; gap: 8px; transition: transform .15s; }
+.note:hover { transform: rotate(-1deg) translateY(-2px); }
+.note:nth-child(4n+1) { background: #ffe4f3; } .note:nth-child(4n+2) { background: #efe5ff; }
+.note:nth-child(4n+3) { background: #fff0e6; } .note:nth-child(4n+4) { background: #fce7ff; }
+.note::before { content: '📌'; position: absolute; top: -10px; right: 10px; font-size: 18px; }
+.note .tx { font-weight: 700; line-height: 1.35; white-space: pre-wrap; word-break: break-word; }
+.note .ft { margin-top: auto; display: flex; gap: 6px; flex-wrap: wrap; font-size: 12px; }
+.note.arch { opacity: .55; }
+.note.arch::before { content: '🗂'; }
+.noideas { color: #c4a7d8; padding: 0 16px 16px; }
+
+/* ---------- Окошки ---------- */
+.overlay { position: fixed; inset: 0; background: rgba(74, 29, 94, .28); display: flex; align-items: center; justify-content: center; z-index: 2000; padding: 16px; }
+.modal { background: #fff; border-radius: 22px; width: 100%; max-width: 520px; max-height: calc(100vh - 32px); overflow: auto; padding: 20px; box-shadow: 0 20px 50px rgba(124,58,237,.25); }
+.modal h2 { font-family: 'Caveat', cursive; font-size: 32px; margin: 0 0 12px; color: var(--fuchsia); line-height: 1.1; }
+.field { margin-bottom: 12px; }
+.field > span { display: block; font-size: 13px; font-weight: 800; color: var(--muted); margin-bottom: 5px; }
+.field input, .field select, .field textarea { width: 100%; border: 1.5px solid var(--line); border-radius: 12px; padding: 10px 12px; background: #fefcff; }
+.field textarea { min-height: 70px; resize: vertical; }
+.field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: #d8b4fe; box-shadow: 0 0 0 3px #f3e8ff; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.imp { display: flex; gap: 6px; flex-wrap: wrap; }
+.imp button { border: 1.5px solid var(--line); background: #fff; border-radius: 999px; padding: 7px 12px; font-weight: 700; }
+.imp button.on { border-color: var(--fuchsia); background: var(--rose); color: #9d174d; }
+.mbtns { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; margin-top: 6px; }
+.mbtns .left { margin-right: auto; }
+.err { color: var(--red); font-weight: 700; font-size: 13.5px; min-height: 18px; margin-bottom: 6px; }
+.info { font-size: 12.5px; color: var(--muted); margin-bottom: 10px; }
+
+.toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 12px 16px; border-radius: 14px;
+  z-index: 3000; display: flex; gap: 12px; align-items: center; max-width: calc(100vw - 32px); box-shadow: 0 10px 30px rgba(0,0,0,.2); font-weight: 600; }
+.toast button { border: none; background: #f9a8d4; color: var(--ink); border-radius: 999px; padding: 5px 12px; font-weight: 800; }
+
+/* ---------- Вход ---------- */
+.login { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 16px; }
+.login .box { background: #fff; border-radius: 26px; padding: 30px 24px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 20px 50px rgba(124,58,237,.18); }
+.login .flowers { font-size: 30px; letter-spacing: 8px; margin-bottom: 4px; }
+.login .logo { font-size: 50px; margin-bottom: 6px; }
+.login p { color: var(--muted); margin: 0 0 18px; }
+.login input { width: 100%; border: 1.5px solid var(--line); border-radius: 14px; padding: 12px 14px; margin-bottom: 12px; text-align: center; }
+.login .btn { width: 100%; padding: 12px; }
+.loading { text-align: center; padding: 80px 16px; font-family: 'Caveat', cursive; font-size: 30px; color: var(--violet); }
+
+@media (max-width: 900px) {
+  .row.head { display: none; }
+  .row { grid-template-columns: 1fr auto; gap: 4px 10px; }
+  .row > * { grid-column: 1 / -1; }
+  .row > .c-person { grid-column: 1; } .row > .c-imp { grid-column: 2; grid-row: 1; justify-self: end; }
+  .lbl { display: inline; }
+}
+@media (max-width: 600px) {
+  .logo { font-size: 36px; }
+  .deco { display: none; }
+  .board { grid-template-columns: repeat(5, 78vw); padding: 0 10px 12px; }
+  .two { grid-template-columns: 1fr; }
+  .wrap { padding: 12px 12px 80px; }
+  .btn, .seg button, .tab { padding: 7px 12px; font-size: 14px; }
+  .status { font-size: 12px; white-space: normal; }
+  .today { font-size: 14px; }
+  .phead .nm { font-size: 26px; }
+}
+</style>
+</head>
+<body>
+<div id="app"><div class="loading">Загружаю… 🌸</div></div>
+
+<script>
+// Ссылка на веб-приложение Google (заканчивается на /exec). Вписывается при запуске.
+const API = 'ВСТАВЬ_СЮДА_ССЫЛКУ_ВЕБ_ПРИЛОЖЕНИЯ';
+
+// ===================== Хранилище браузера (без него тоже работает) =====================
+const LS = {
+  get(k, d) { try { const v = localStorage.getItem('mz_' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem('mz_' + k, JSON.stringify(v)); } catch (e) {} },
+  del(k) { try { localStorage.removeItem('mz_' + k); } catch (e) {} },
+};
+
+const S = {
+  token: LS.get('token', ''),
+  data: LS.get('cache', null),
+  queue: LS.get('queue', []),
+  tab: LS.get('tab', 'tasks'),
+  view: LS.get('view', 'board'),
+  open: LS.get('open', null),
+  deptClosed: LS.get('deptClosed', {}),
+  f: { person: '', imp: '', stage: '', done: false },
+  showArchive: false,
+  offline: false, saving: false,
+};
+const STAGE_KEYS = ['idea', 'dated', 'work', 'done', 'fail'];
+const CLOSED = ['done', 'fail'];
+const MONTHS = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+const DAYS = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'];
+
+// ===================== Помощники =====================
+const $ = (s, el) => (el || document).querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const uid = p => p + Math.random().toString(36).slice(2, 8) + Date.now().toString(36).slice(-4);
+function ymdParts(s) { const p = s.split('-').map(Number); return new Date(Date.UTC(p[0], p[1] - 1, p[2])); }
+function addDays(s, n) { const d = ymdParts(s); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); }
+function dow(s) { return ymdParts(s).getUTCDay(); }
+function ddmm(s) { return s ? s.slice(8, 10) + '.' + s.slice(5, 7) : ''; }
+function nice(s) { const d = ymdParts(s); return d.getUTCDate() + ' ' + MONTHS[d.getUTCMonth()]; }
+function monday(s) { const w = dow(s); return addDays(s, w === 0 ? -6 : 1 - w); }
+function today() { return S.data ? S.data.today : new Date().toISOString().slice(0, 10); }
+function workDate(t) { return t.ready || t.deadline || ''; }
+function isOverdue(t) { return CLOSED.indexOf(t.stage) === -1 && !!workDate(t) && workDate(t) < today(); }
+function stageLabel(k) { const s = (S.data.stages || []).find(x => x[0] === k); return s ? s[1] : k; }
+function impIcon(k) { const i = (S.data.importance || []).find(x => x[0] === k); return i ? i[1] : '⭐'; }
+function impName(k) { const i = (S.data.importance || []).find(x => x[0] === k); return i ? i[2] : ''; }
+function personOf(name) { return S.data.people.find(p => p.name === name) || { name: name, color: '#c4b5fd', emoji: '❔' }; }
+function saveCache() { LS.set('cache', S.data); }
+function weekLabel(mon) {
+  const sun = addDays(mon, 6), a = ymdParts(mon), b = ymdParts(sun);
+  const range = a.getUTCMonth() === b.getUTCMonth() ? a.getUTCDate() + '–' + b.getUTCDate() + ' ' + MONTHS[b.getUTCMonth()] : nice(mon) + ' – ' + nice(sun);
+  const cur = monday(today());
+  if (mon === cur) return '🌸 Эта неделя (' + range + ')';
+  if (mon === addDays(cur, 7)) return '🦋 Следующая неделя (' + range + ')';
+  return '📅 Неделя ' + range;
+}
+
+// ===================== Связь с Google =====================
+async function call(action, payload) {
+  if (/^ВСТАВЬ/.test(API)) throw new Error('В странице не вписана ссылка на веб-приложение (строка const API).');
+  const r = await fetch(API, { method: 'POST', body: JSON.stringify(Object.assign({ action: action, token: S.token }, payload || {})) });
+  if (!r.ok) throw new TypeError('HTTP ' + r.status);
+  return r.json();
+}
+
+function enqueue(action, payload, key) {
+  S.queue.push({ action: action, payload: payload, key: key || '' });
+  LS.set('queue', S.queue); saveCache(); flush();
+}
+
+let flushing = false, retryTimer = null;
+async function flush() {
+  if (flushing || !S.token) return;
+  flushing = true; S.saving = S.queue.length > 0; status();
+  try {
+    while (S.queue.length) {
+      const op = S.queue[0];
+      let res;
+      try { res = await call(op.action, op.payload); }
+      catch (e) {
+        if (/ВСТАВЬ|ссылка/.test(e.message)) { toast(e.message); return; }
+        S.offline = true; clearTimeout(retryTimer); retryTimer = setTimeout(flush, 20000); return;
+      }
+      S.offline = false;
+      if (!res.ok) {
+        if (res.auth) { showLogin('Войдите снова — несохранённые изменения отправятся после входа.'); return; }
+        S.queue.shift(); LS.set('queue', S.queue);
+        toast('Не сохранилось: ' + res.error);
+        await reload(true);
+        continue;
+      }
+      S.queue.shift(); LS.set('queue', S.queue);
+      applyServer(op, res);
+    }
+  } finally { flushing = false; S.saving = false; status(); }
+}
+
+/** Ответ сервера кладём к себе, только если после этого действия нет других правок той же записи. */
+function applyServer(op, res) {
+  if (op.key && S.queue.some(q => q.key === op.key)) return;
+  if (res.task) {
+    const i = S.data.tasks.findIndex(t => t.id === res.task.id);
+    if (res.task.deleted) { if (i !== -1) S.data.tasks.splice(i, 1); }
+    else if (i !== -1) S.data.tasks[i] = Object.assign(S.data.tasks[i], res.task); else S.data.tasks.push(res.task);
+  }
+  if (res.idea) {
+    const i = S.data.ideas.findIndex(t => t.id === res.idea.id);
+    if (res.idea.deleted) { if (i !== -1) S.data.ideas.splice(i, 1); }
+    else if (i !== -1) S.data.ideas[i] = res.idea; else S.data.ideas.push(res.idea);
+  }
+  if (res.idepts) S.data.idepts = res.idepts;
+  saveCache(); render();
+}
+
+async function reload(quiet) {
+  if (S.queue.length) { await flush(); if (S.queue.length) return; }
+  try {
+    const res = await call('bootstrap');
+    if (!res.ok) { if (res.auth) return showLogin(); if (!quiet) toast(res.error); return; }
+    delete res.ok;
+    S.data = res; S.offline = false; saveCache(); render();
+  } catch (e) {
+    S.offline = true; status();
+    if (/ВСТАВЬ/.test(e.message)) toast(e.message);
+    if (!S.data) $('#app').innerHTML = '<div class="loading">Нет связи с Google 📵<br><small>Проверьте интернет и обновите страницу</small></div>';
+  }
+}
+
+function status() {
+  const el = $('#status'); if (!el) return;
+  const n = S.queue.length;
+  el.className = 'status' + (S.offline && n ? ' bad' : '');
+  el.textContent = S.offline && n ? '📵 Нет связи — не сохранено: ' + n + '. Отправлю, как появится связь'
+    : n ? '⏳ Сохраняю…' : S.offline ? '📵 Нет связи' : '💜 Всё сохранено';
+  document.querySelectorAll('.card').forEach(c => c.classList.toggle('pending', S.queue.some(q => q.key === c.dataset.id)));
+}
+
+// ===================== Вход =====================
+function showLogin(msg) {
+  S.token = ''; LS.del('token');
+  $('#app').innerHTML = `
+    <div class="login"><form class="box" id="loginForm">
+      <div class="flowers">🌸💜🦋</div>
+      <div class="logo">Мой задачник</div>
+      <p>${esc(msg || 'Привет, Дарья! ✨')}</p>
+      <input type="password" id="pw" placeholder="Пароль" autocomplete="current-password" required>
+      <div class="err" id="loginErr"></div>
+      <button class="btn" type="submit">Войти 🌷</button>
+    </form></div>`;
+  $('#pw').focus();
+  $('#loginForm').onsubmit = async e => {
+    e.preventDefault();
+    const btn = $('#loginForm .btn'); btn.disabled = true; $('#loginErr').textContent = '';
+    try {
+      const res = await call('login', { password: $('#pw').value });
+      if (!res.ok) { $('#loginErr').textContent = res.error; btn.disabled = false; return; }
+      S.token = res.token; LS.set('token', S.token);
+      $('#app').innerHTML = '<div class="loading">Загружаю… 🌸</div>';
+      await flush(); await reload();
+    } catch (err) { $('#loginErr').textContent = /ВСТАВЬ/.test(err.message) ? err.message : 'Нет связи с Google. Проверьте интернет.'; btn.disabled = false; }
+  };
+}
+
+function logout() {
+  if (S.queue.length && !confirm('Есть несохранённые изменения (' + S.queue.length + '). Если выйти сейчас, они пропадут. Выйти?')) return;
+  call('logout').catch(() => {});
+  S.queue = []; LS.del('queue'); LS.del('cache'); S.data = null;
+  showLogin('Вы вышли. До встречи! 🌷');
+}
+
+// ===================== Отрисовка =====================
+function render() {
+  if (!S.data) return;
+  if (!S.open) { S.open = {}; if (S.data.people[0]) S.open[S.data.people[0].name] = true; }
+  const d = today();
+  const scrollY = window.scrollY, boardScroll = {};
+  document.querySelectorAll('.board').forEach(b => { boardScroll[b.dataset.person] = b.scrollLeft; });
+  $('#app').innerHTML = `
+    <div class="wrap">
+      <header class="top">
+        <div class="logo">Мой задачник</div><span class="logo-em">🌸</span>
+        <div class="today">Сегодня ${DAYS[dow(d)]}, ${nice(d)}</div>
+        <div class="spacer"></div>
+        <div class="status" id="status"></div>
+        <button class="ghostbtn" id="logout">Выйти</button>
+      </header>
+      <nav class="tabs">
+        <button class="tab ${S.tab === 'tasks' ? 'on' : ''}" data-tab="tasks">📋 Задачи</button>
+        <button class="tab ${S.tab === 'ideas' ? 'on' : ''}" data-tab="ideas">💭 Идеи</button>
+      </nav>
+      <main id="main">${S.tab === 'tasks' ? tasksHtml() : ideasHtml()}</main>
+    </div>`;
+  status();
+  document.querySelectorAll('.board').forEach(b => { if (boardScroll[b.dataset.person]) b.scrollLeft = boardScroll[b.dataset.person]; });
+  window.scrollTo(0, scrollY);
+}
+
+function tasksHtml() {
+  return `
+    <div class="toolbar">
+      <div class="seg"><button data-view="board" class="${S.view === 'board' ? 'on' : ''}">🗂 Доска</button><button data-view="list" class="${S.view === 'list' ? 'on' : ''}">📃 Список</button></div>
+      ${S.view === 'board' ? '<button class="btn soft" data-act="openAll">Развернуть всё</button><button class="btn soft" data-act="closeAll">Свернуть всё</button>' : ''}
+      <div class="spacer"></div>
+      <button class="btn" data-act="newTask">＋ Задача</button>
+    </div>
+    ${S.view === 'board' ? boardHtml() : listHtml()}`;
+}
+
+function sortCards(list) {
+  return list.slice().sort((a, b) => (Number(a.pos) || 999) - (Number(b.pos) || 999) || (a.created < b.created ? -1 : 1));
+}
+
+function cardHtml(t) {
+  const chips = [];
+  if (t.stage === 'work' && t.ready) chips.push(`<span class="chip pink">🔧 готово ${ddmm(t.ready)}</span>`);
+  if (t.deadline) chips.push(`<span class="chip ${isOverdue(t) ? 'red' : ''}">📅 ${ddmm(t.deadline)}</span>`);
+  if (isOverdue(t)) chips.push('<span class="chip red">⏰ просрочено</span>');
+  if (Number(t.moved) > 0) chips.push(`<span class="chip grey" title="Срок переносили">🔁 ${t.moved}</span>`);
+  if (t.note) chips.push('<span class="chip grey" title="Есть заметка">📝</span>');
+  return `<div class="card ${isOverdue(t) ? 'overdue' : ''} ${S.queue.some(q => q.key === t.id) ? 'pending' : ''}" data-id="${esc(t.id)}">
+    <div class="tt">${t.importance !== 'star' ? impIcon(t.importance) + ' ' : ''}${esc(t.title)}</div>
+    ${chips.length ? '<div class="meta">' + chips.join('') + '</div>' : ''}
+    ${t.stage === 'fail' && t.reason ? '<div class="why">💔 ' + esc(t.reason) + '</div>' : ''}
+  </div>`;
+}
+
+const EMPTY = { idea: 'тут пока пусто 🌷', dated: 'нет задач со сроком 🌼', work: 'никто не трудится 😴', done: 'ещё ничего не готово ✨', fail: 'и хорошо 💖' };
+function boardHtml() {
+  return S.data.people.map(p => {
+    const mine = S.data.tasks.filter(t => t.person === p.name);
+    const openN = mine.filter(t => CLOSED.indexOf(t.stage) === -1).length, over = mine.filter(isOverdue).length;
+    const isOpen = !!S.open[p.name];
+    return `<section class="person ${isOpen ? 'open' : ''}" style="--pc:${esc(p.color)}">
+      <button class="phead" data-toggle="${esc(p.name)}">
+        <span class="em">${esc(p.emoji)}</span><span class="nm">${esc(p.name)}</span>
+        <span class="cnt">${openN} ${plural(openN, 'задача', 'задачи', 'задач')}</span>
+        ${over ? `<span class="ovd">⏰ ${over}</span>` : ''}
+        ${p.active ? '' : '<span class="gone">не в списке</span>'}
+        <span class="chev">›</span>
+      </button>
+      ${isOpen ? `<div class="board" data-person="${esc(p.name)}">${STAGE_KEYS.map(st => {
+        const list = sortCards(mine.filter(t => t.stage === st));
+        return `<div class="col" data-stage="${st}">
+          <div class="colhead">${stageLabel(st)} <span>${list.length || ''}</span></div>
+          <div class="cards" data-stage="${st}" data-person="${esc(p.name)}">${list.length ? list.map(cardHtml).join('') : `<div class="empty">${EMPTY[st]}</div>`}</div>
+          <button class="add" data-add="${st}" data-person="${esc(p.name)}">＋ добавить</button>
+        </div>`;
+      }).join('')}</div>` : ''}
+    </section>`;
+  }).join('');
+}
+function plural(n, a, b, c) { const m10 = n % 10, m100 = n % 100; return m10 === 1 && m100 !== 11 ? a : m10 >= 2 && m10 <= 4 && (m100 < 10 || m100 >= 20) ? b : c; }
+
+function listHtml() {
+  const f = S.f, d = today();
+  const opt = (v, l, cur) => `<option value="${esc(v)}" ${v === cur ? 'selected' : ''}>${esc(l)}</option>`;
+  let list = S.data.tasks.filter(t => (!f.person || t.person === f.person) && (!f.imp || t.importance === f.imp) && (!f.stage || t.stage === f.stage)
+    && (f.done || f.stage || CLOSED.indexOf(t.stage) === -1));
+  const groups = {}, order = [];
+  const add = (k, label, t, cls) => { if (!groups[k]) { groups[k] = { label: label, items: [], cls: cls || '' }; order.push(k); } groups[k].items.push(t); };
+  list.forEach(t => {
+    if (isOverdue(t)) add('0', '⏰ Просрочено', t, 'red');
+    else if (!workDate(t)) add('9', '🌙 Без срока', t);
+    else { const m = monday(workDate(t)); add('5' + m, weekLabel(m), t); }
+  });
+  order.sort();
+  const peopleOrder = S.data.people.map(p => p.name);
+  const rows = order.map(k => {
+    const g = groups[k];
+    g.items.sort((a, b) => (workDate(a) || '9') < (workDate(b) || '9') ? -1 : (workDate(a) || '9') > (workDate(b) || '9') ? 1 : peopleOrder.indexOf(a.person) - peopleOrder.indexOf(b.person));
+    return `<div class="group"><h3 class="${g.cls}">${g.label}</h3>
+      <div class="row head"><div>Кто</div><div>Задача</div><div></div><div>Этап</div><div>Срок</div><div>Будет готово</div><div>Заметка / причина</div></div>
+      ${g.items.map(t => { const p = personOf(t.person); return `<div class="row ${isOverdue(t) ? 'overdue' : ''}" data-open="${esc(t.id)}">
+        <div class="c-person"><span class="pill" style="--pc:${esc(p.color)}">${esc(p.emoji)} ${esc(p.name)}</span></div>
+        <div class="tt">${esc(t.title)}${Number(t.moved) > 0 ? ' <span class="chip grey">🔁 ' + t.moved + '</span>' : ''}</div>
+        <div class="c-imp" title="${esc(impName(t.importance))}">${impIcon(t.importance)}</div>
+        <div class="small"><span class="lbl">Этап: </span>${stageLabel(t.stage)}</div>
+        <div class="dl small"><span class="lbl">Срок: </span>${t.deadline ? ddmm(t.deadline) : '—'}</div>
+        <div class="small"><span class="lbl">Будет готово: </span>${t.ready ? ddmm(t.ready) : '—'}</div>
+        <div class="small">${t.stage === 'fail' && t.reason ? '💔 ' + esc(t.reason) : esc(t.note)}</div>
+      </div>`; }).join('')}
+    </div>`;
+  }).join('');
+  return `<div class="filters">
+      <select data-f="person">${opt('', 'Все люди', f.person)}${S.data.people.map(p => opt(p.name, p.emoji + ' ' + p.name, f.person)).join('')}</select>
+      <select data-f="imp">${opt('', 'Любая важность', f.imp)}${S.data.importance.map(i => opt(i[0], i[1] + ' ' + i[2], f.imp)).join('')}</select>
+      <select data-f="stage">${opt('', 'Все этапы', f.stage)}${S.data.stages.map(s => opt(s[0], s[1], f.stage)).join('')}</select>
+      <label><input type="checkbox" data-f="done" ${f.done ? 'checked' : ''}> Показать выполненные и незавершённые</label>
+    </div>
+    ${rows || '<div class="group"><h3>Ничего не нашлось 🌷</h3><div class="noideas">Попробуйте другие фильтры</div></div>'}`;
+}
+
+function ideasHtml() {
+  return `<div class="toolbar">
+      <div class="filters" style="margin:0"><label><input type="checkbox" data-act="arch" ${S.showArchive ? 'checked' : ''}> Показать архив</label></div>
+      <div class="spacer"></div>
+      <button class="btn soft" data-act="newDept">＋ Отдел</button>
+      <button class="btn" data-act="newIdea">＋ Идея</button>
+    </div>
+    ${S.data.idepts.map(d => {
+      const list = S.data.ideas.filter(i => i.dept === d.name && (S.showArchive || !i.archived))
+        .sort((a, b) => (a.archived ? 1 : 0) - (b.archived ? 1 : 0) || (a.date < b.date ? 1 : -1));
+      const closed = !!S.deptClosed[d.name];
+      return `<section class="dept">
+        <div class="dhead">
+          <button class="t" data-dtoggle="${esc(d.name)}"><span class="em">${esc(d.emoji)}</span><span class="nm">${esc(d.name)}</span>
+            <span class="chip">${list.filter(i => !i.archived).length}</span><span class="chev" style="color:var(--muted)">${closed ? '›' : '⌄'}</span></button>
+          <button class="ghostbtn" data-rdept="${esc(d.name)}" title="Переименовать">✎</button>
+          <button class="ghostbtn" data-addidea="${esc(d.name)}">＋ идея</button>
+        </div>
+        ${closed ? '' : list.length ? `<div class="notes">${list.map(i => `<div class="note ${i.archived ? 'arch' : ''}" data-idea="${esc(i.id)}">
+            <div class="tx">${esc(i.text)}</div>
+            ${i.note ? `<div class="small" style="font-size:13px;color:var(--muted)">${esc(i.note)}</div>` : ''}
+            <div class="ft">${i.author ? `<span class="chip">${esc((personOf(i.author).emoji !== '❔' ? personOf(i.author).emoji + ' ' : '💫 ') + i.author)}</span>` : ''}<span class="chip grey">${ddmm(i.date)}</span></div>
+          </div>`).join('')}</div>` : '<div class="noideas">Идей пока нет — самое время помечтать ✨</div>'}
+      </section>`;
+    }).join('')}`;
+}
+
+// ===================== Окошки =====================
+function modal(html, onReady) {
+  closeModal();
+  const ov = document.createElement('div');
+  ov.className = 'overlay'; ov.id = 'overlay';
+  ov.innerHTML = `<div class="modal" role="dialog" aria-modal="true">${html}</div>`;
+  document.body.appendChild(ov);
+  ov.addEventListener('mousedown', e => { if (e.target === ov) ov.dataset.out = '1'; });
+  ov.addEventListener('click', e => { if (e.target === ov && ov.dataset.out) { ov.dataset.out = ''; (ov._cancel || closeModal)(); } });
+  if (onReady) onReady(ov);
+  const first = ov.querySelector('input:not([type=checkbox]),textarea,select');
+  if (first && window.innerWidth > 600) first.focus();
+  return ov;
+}
+function closeModal() { const ov = $('#overlay'); if (ov) ov.remove(); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('#overlay')) ($('#overlay')._cancel || closeModal)(); });
+
+let toastTimer = null;
+function toast(text, actionLabel, onAction, ms) {
+  const old = $('.toast'); if (old) old.remove();
+  const t = document.createElement('div'); t.className = 'toast';
+  t.innerHTML = `<span>${esc(text)}</span>` + (actionLabel ? `<button>${esc(actionLabel)}</button>` : '');
+  document.body.appendChild(t);
+  if (actionLabel) t.querySelector('button').onclick = () => { t.remove(); onAction(); };
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.remove(), ms || 4000);
+}
+
+/** Окошко при переносе карточки: срок / «будет готово» / причина. resolve(null) — отмена. */
+function askDrop(t, stage) {
+  return new Promise(resolve => {
+    let html, check;
+    if (stage === 'dated') {
+      html = `<h2>📅 Какой срок?</h2><div class="info">${esc(t.title)}</div>
+        <div class="field"><span>Срок</span><input type="date" id="q" value="${esc(t.deadline || '')}" required></div>`;
+      check = v => v ? { deadline: v } : 'Укажите срок — без него в «Дата назначена» не переносится.';
+    } else if (stage === 'work') {
+      html = `<h2>🔧 Когда будет готово?</h2><div class="info">${esc(t.title)}<br>Можно оставить пустым — тогда действует срок${t.deadline ? ' (' + ddmm(t.deadline) + ')' : ''}.</div>
+        <div class="field"><span>Будет готово</span><input type="date" id="q" value="${esc(t.ready || '')}"></div>`;
+      check = v => ({ ready: v });
+    } else if (stage === 'fail') {
+      html = `<h2>❌ Почему не завершена?</h2><div class="info">${esc(t.title)}</div>
+        <div class="field"><span>Причина</span><textarea id="q" placeholder="Например: перенесли на январь">${esc(t.reason || '')}</textarea></div>`;
+      check = v => v.trim() ? { reason: v.trim() } : 'Напишите причину — без неё в «Не завершена» не переносится.';
+    }
+    html += `<div class="err" id="qerr"></div><div class="mbtns"><button class="btn soft" id="qno">Отмена</button><button class="btn" id="qok">Готово 💜</button></div>`;
+    modal(html, ov => {
+      const done = v => { closeModal(); resolve(v); };
+      ov._cancel = () => done(null);
+      $('#qno').onclick = () => done(null);
+      const ok = () => { const r = check($('#q').value); if (typeof r === 'string') { $('#qerr').textContent = r; return; } done(r); };
+      $('#qok').onclick = ok;
+      $('#q').addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.tagName === 'INPUT') ok(); });
+    });
+  });
+}
+
+function taskModal(t, isNew) {
+  const p = S.data.people;
+  const opt = (v, l, cur) => `<option value="${esc(v)}" ${v === cur ? 'selected' : ''}>${esc(l)}</option>`;
+  modal(`<h2>${isNew ? '✨ Новая задача' : '🌸 Задача'}</h2>
+    <div class="field"><span>Задача</span><textarea id="m-title" placeholder="Что нужно сделать?">${esc(t.title)}</textarea></div>
+    <div class="two">
+      <div class="field"><span>Человек</span><select id="m-person">${p.map(x => opt(x.name, x.emoji + ' ' + x.name, t.person)).join('')}</select></div>
+      <div class="field"><span>Этап</span><select id="m-stage">${S.data.stages.map(s => opt(s[0], s[1], t.stage)).join('')}</select></div>
+    </div>
+    <div class="field"><span>Важность</span><div class="imp" id="m-imp">${S.data.importance.map(i => `<button type="button" data-v="${i[0]}" class="${t.importance === i[0] ? 'on' : ''}">${i[1]} ${i[2]}</button>`).join('')}</div></div>
+    <div class="two">
+      <div class="field"><span>📅 Срок</span><input type="date" id="m-deadline" value="${esc(t.deadline)}"></div>
+      <div class="field"><span>🔧 Будет готово</span><input type="date" id="m-ready" value="${esc(t.ready)}"></div>
+    </div>
+    <div class="field" id="m-reason-f"><span>💔 Почему не завершена</span><textarea id="m-reason">${esc(t.reason)}</textarea></div>
+    <div class="field"><span>📝 Заметка</span><textarea id="m-note" placeholder="Например: обсудили на созвоне с Ромой">${esc(t.note)}</textarea></div>
+    ${isNew ? '' : `<div class="info">Создана ${esc((t.created || '').slice(8, 10) + '.' + (t.created || '').slice(5, 7))}${Number(t.moved) > 0 ? ' · срок переносили ' + t.moved + ' раз' : ''}</div>`}
+    <div class="err" id="m-err"></div>
+    <div class="mbtns">${isNew ? '' : '<button class="btn danger left" id="m-del">🗑 Удалить</button>'}<button class="btn soft" id="m-cancel">Отмена</button><button class="btn" id="m-save">Сохранить 💜</button></div>`,
+  ov => {
+    let imp = t.importance || 'star';
+    const syncReason = () => { $('#m-reason-f').style.display = $('#m-stage').value === 'fail' ? '' : 'none'; };
+    syncReason(); $('#m-stage').onchange = syncReason;
+    ov.querySelectorAll('#m-imp button').forEach(b => b.onclick = () => { imp = b.dataset.v; ov.querySelectorAll('#m-imp button').forEach(x => x.classList.toggle('on', x === b)); });
+    $('#m-cancel').onclick = closeModal;
+    if (!isNew) $('#m-del').onclick = () => { closeModal(); deleteTask(t.id); };
+    $('#m-save').onclick = () => {
+      const n = Object.assign({}, t, { title: $('#m-title').value.trim(), person: $('#m-person').value, stage: $('#m-stage').value, importance: imp,
+        deadline: $('#m-deadline').value, ready: $('#m-ready').value, reason: $('#m-reason').value.trim(), note: $('#m-note').value.trim() });
+      const err = !n.title ? 'Впишите задачу.' : n.stage === 'dated' && !n.deadline ? 'Для «Дата назначена» нужен срок.'
+        : n.stage === 'fail' && !n.reason ? 'Напишите, почему задача не завершена.' : '';
+      if (err) { $('#m-err').textContent = err; return; }
+      if (n.stage !== 'fail') n.reason = '';
+      closeModal();
+      const moved = isNew || n.stage !== t.stage || n.person !== t.person;
+      if (moved) n.pos = String(1 + S.data.tasks.filter(x => x.person === n.person && x.stage === n.stage && x.id !== n.id).reduce((m, x) => Math.max(m, Number(x.pos) || 0), 0));
+      saveTask(n, isNew);
+      if (isNew && !S.open[n.person] && S.view === 'board') { S.open[n.person] = true; LS.set('open', S.open); render(); }
+      toast(isNew ? 'Задача добавлена ✨' : 'Сохранено 💜');
+    };
+  });
+}
+
+function saveTask(n, isNew, order) {
+  if (isNew) { n.created = n.created || new Date().toISOString().slice(0, 16).replace('T', ' '); n.moved = '0'; S.data.tasks.push(n); }
+  else {
+    const i = S.data.tasks.findIndex(x => x.id === n.id);
+    const old = S.data.tasks[i];
+    if ((old.deadline && old.deadline !== n.deadline) || (old.ready && old.ready !== n.ready)) n.moved = String((Number(old.moved) || 0) + 1);
+    S.data.tasks[i] = n;
+  }
+  const payload = { task: { id: n.id, title: n.title, person: n.person, importance: n.importance, stage: n.stage, deadline: n.deadline || '', ready: n.ready || '',
+    reason: n.reason || '', note: n.note || '' } };
+  if (order) payload.order = order;
+  else if (n.pos) payload.order = sortCards(S.data.tasks.filter(x => x.person === n.person && x.stage === n.stage)).map(x => x.id);
+  render();
+  enqueue('saveTask', payload, n.id);
+}
+
+function deleteTask(id) {
+  const i = S.data.tasks.findIndex(x => x.id === id); if (i === -1) return;
+  const t = S.data.tasks.splice(i, 1)[0];
+  render(); enqueue('deleteTask', { id: id }, id);
+  toast('Задача удалена', 'Вернуть', () => { S.data.tasks.push(t); render(); enqueue('restoreTask', { id: id }, id); }, 7000);
+}
+
+function ideaModal(i, isNew) {
+  const opt = (v, l, cur) => `<option value="${esc(v)}" ${v === cur ? 'selected' : ''}>${esc(l)}</option>`;
+  modal(`<h2>${isNew ? '💡 Новая идея' : '💭 Идея'}</h2>
+    <div class="field"><span>Идея</span><textarea id="i-text" placeholder="Что придумали?">${esc(i.text)}</textarea></div>
+    <div class="two">
+      <div class="field"><span>Отдел</span><select id="i-dept">${S.data.idepts.map(d => opt(d.name, d.emoji + ' ' + d.name, i.dept)).join('')}</select></div>
+      <div class="field"><span>Чья идея</span><select id="i-author">${opt('', '—', i.author)}${S.data.people.map(p => opt(p.name, p.emoji + ' ' + p.name, i.author)).join('')}${opt('команда', '💫 команда', i.author)}</select></div>
+    </div>
+    <div class="two">
+      <div class="field"><span>Дата</span><input type="date" id="i-date" value="${esc(i.date || today())}"></div>
+      <div class="field"><span>&nbsp;</span><label style="display:flex;gap:8px;align-items:center;padding-top:10px;font-weight:700"><input type="checkbox" id="i-arch" ${i.archived ? 'checked' : ''} style="width:auto"> 🗂 В архив</label></div>
+    </div>
+    <div class="field"><span>📝 Заметка</span><textarea id="i-note">${esc(i.note)}</textarea></div>
+    <div class="err" id="i-err"></div>
+    <div class="mbtns">${isNew ? '' : '<button class="btn danger left" id="i-del">🗑 Удалить</button>'}<button class="btn soft" id="i-cancel">Отмена</button><button class="btn" id="i-save">Сохранить 💜</button></div>`,
+  () => {
+    $('#i-cancel').onclick = closeModal;
+    if (!isNew) $('#i-del').onclick = () => {
+      closeModal();
+      const k = S.data.ideas.findIndex(x => x.id === i.id), saved = S.data.ideas.splice(k, 1)[0];
+      render(); enqueue('deleteIdea', { id: i.id }, i.id);
+      toast('Идея удалена', 'Вернуть', () => { S.data.ideas.push(saved); render(); enqueue('restoreIdea', { id: i.id }, i.id); }, 7000);
+    };
+    $('#i-save').onclick = () => {
+      const n = Object.assign({}, i, { text: $('#i-text').value.trim(), dept: $('#i-dept').value, author: $('#i-author').value,
+        date: $('#i-date').value || today(), note: $('#i-note').value.trim(), archived: $('#i-arch').checked ? 'да' : '' });
+      if (!n.text) { $('#i-err').textContent = 'Впишите идею.'; return; }
+      closeModal();
+      const k = S.data.ideas.findIndex(x => x.id === n.id);
+      if (k === -1) S.data.ideas.push(n); else S.data.ideas[k] = n;
+      if (S.deptClosed[n.dept]) { delete S.deptClosed[n.dept]; LS.set('deptClosed', S.deptClosed); }
+      render();
+      enqueue('saveIdea', { idea: { id: n.id, text: n.text, dept: n.dept, author: n.author, date: n.date, note: n.note, archived: !!n.archived } }, n.id);
+      toast(isNew ? 'Идея записана 💡' : 'Сохранено 💜');
+    };
+  });
+}
+
+function deptModal(oldName) {
+  const d = oldName ? S.data.idepts.find(x => x.name === oldName) : { name: '', emoji: '💭' };
+  modal(`<h2>${oldName ? '✎ Отдел' : '＋ Новый отдел'}</h2>
+    <div class="two"><div class="field"><span>Название</span><input id="d-name" value="${esc(d.name)}"></div>
+    <div class="field"><span>Эмодзи</span><input id="d-emoji" value="${esc(d.emoji)}" maxlength="4"></div></div>
+    <div class="err" id="d-err"></div>
+    <div class="mbtns"><button class="btn soft" id="d-cancel">Отмена</button><button class="btn" id="d-save">Сохранить 💜</button></div>`,
+  () => {
+    $('#d-cancel').onclick = closeModal;
+    $('#d-save').onclick = () => {
+      const name = $('#d-name').value.trim(), emoji = $('#d-emoji').value.trim() || '💭';
+      if (!name) { $('#d-err').textContent = 'Впишите название.'; return; }
+      if (S.data.idepts.some(x => x.name === name && x.name !== oldName)) { $('#d-err').textContent = 'Такой отдел уже есть.'; return; }
+      closeModal();
+      if (oldName) { d.name = name; d.emoji = emoji; S.data.ideas.forEach(i => { if (i.dept === oldName) i.dept = name; }); }
+      else S.data.idepts.push({ name: name, emoji: emoji });
+      render(); enqueue('saveIdept', { name: name, oldName: oldName || '', emoji: emoji }, 'dept');
+    };
+  });
+}
+
+// ===================== Нажатия =====================
+let suppressClick = false;
+document.addEventListener('click', e => {
+  if (suppressClick) { e.preventDefault(); e.stopPropagation(); return; }
+  const el = e.target.closest('[data-tab],[data-view],[data-act],[data-toggle],[data-add],[data-open],[data-dtoggle],[data-rdept],[data-addidea],[data-idea],.card,#logout');
+  if (!el) return;
+  if (el.id === 'logout') return logout();
+  if (el.dataset.tab) { S.tab = el.dataset.tab; LS.set('tab', S.tab); window.scrollTo(0, 0); return render(); }
+  if (el.dataset.view) { S.view = el.dataset.view; LS.set('view', S.view); return render(); }
+  if (el.dataset.toggle) { S.open[el.dataset.toggle] = !S.open[el.dataset.toggle]; LS.set('open', S.open); return render(); }
+  if (el.dataset.dtoggle) { S.deptClosed[el.dataset.dtoggle] = !S.deptClosed[el.dataset.dtoggle]; LS.set('deptClosed', S.deptClosed); return render(); }
+  if (el.dataset.rdept) return deptModal(el.dataset.rdept);
+  if (el.dataset.addidea) return ideaModal({ id: uid('i'), text: '', dept: el.dataset.addidea, author: 'Дарья', date: today(), note: '', archived: '' }, true);
+  if (el.dataset.idea) return ideaModal(Object.assign({}, S.data.ideas.find(i => i.id === el.dataset.idea)), false);
+  if (el.dataset.add) return taskModal(blankTask(el.dataset.person, el.dataset.add), true);
+  if (el.dataset.open || el.classList.contains('card')) {
+    const t = S.data.tasks.find(x => x.id === (el.dataset.open || el.dataset.id));
+    if (t) taskModal(Object.assign({}, t), false);
+    return;
+  }
+  const a = el.dataset.act;
+  if (a === 'openAll' || a === 'closeAll') { S.data.people.forEach(p => { S.open[p.name] = a === 'openAll'; }); LS.set('open', S.open); return render(); }
+  if (a === 'newTask') { const first = S.data.people.find(p => S.open[p.name]) || S.data.people[0]; return taskModal(blankTask(first.name, 'idea'), true); }
+  if (a === 'newIdea') return ideaModal({ id: uid('i'), text: '', dept: (S.data.idepts[0] || {}).name, author: 'Дарья', date: today(), note: '', archived: '' }, true);
+  if (a === 'newDept') return deptModal('');
+}, true);
+document.addEventListener('change', e => {
+  const f = e.target.dataset.f;
+  if (f) { S.f[f] = e.target.type === 'checkbox' ? e.target.checked : e.target.value; return render(); }
+  if (e.target.dataset.act === 'arch') { S.showArchive = e.target.checked; render(); }
+});
+function blankTask(person, stage) {
+  return { id: uid('t'), title: '', person: person, stage: stage, importance: 'star', deadline: '', ready: '', reason: '', note: '', pos: '', moved: '0', created: '' };
+}
+
+// ===================== Перетаскивание (мышь и палец) =====================
+let drag = null;
+function cardFrom(e) { const c = e.target.closest && e.target.closest('.card'); return c && c.closest('.board') ? c : null; }
+
+document.addEventListener('pointerdown', e => {
+  if (e.pointerType !== 'mouse' || e.button !== 0) return;
+  const c = cardFrom(e); if (!c) return;
+  drag = { el: c, id: c.dataset.id, sx: e.clientX, sy: e.clientY, x: e.clientX, y: e.clientY, active: false };
+});
+document.addEventListener('pointermove', e => {
+  if (!drag || e.pointerType !== 'mouse') return;
+  drag.x = e.clientX; drag.y = e.clientY;
+  if (!drag.active && Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) > 6) activate();
+  if (drag && drag.active) moveTo(e.clientX, e.clientY);
+});
+document.addEventListener('pointerup', e => { if (drag && e.pointerType === 'mouse') finish(); });
+
+// Палец: долгое нажатие (0,35 с) — берём карточку; если сразу повели — это прокрутка.
+document.addEventListener('touchstart', e => {
+  if (e.touches.length !== 1) return;
+  const c = cardFrom(e); if (!c) return;
+  const t = e.touches[0];
+  drag = { el: c, id: c.dataset.id, sx: t.clientX, sy: t.clientY, x: t.clientX, y: t.clientY, active: false, touch: true };
+  drag.timer = setTimeout(() => { if (drag && !drag.active) { activate(); if (navigator.vibrate) navigator.vibrate(15); } }, 350);
+}, { passive: true });
+document.addEventListener('touchmove', e => {
+  if (!drag || !drag.touch) return;
+  const t = e.touches[0]; drag.x = t.clientX; drag.y = t.clientY;
+  if (!drag.active) { if (Math.hypot(t.clientX - drag.sx, t.clientY - drag.sy) > 10) { clearTimeout(drag.timer); drag = null; } return; }
+  e.preventDefault(); moveTo(t.clientX, t.clientY);
+}, { passive: false });
+document.addEventListener('touchend', () => { if (drag && drag.touch) { clearTimeout(drag.timer); if (drag.active) finish(); else drag = null; } });
+document.addEventListener('touchcancel', () => { if (drag && drag.touch) { clearTimeout(drag.timer); if (drag.active) cancelDrag(); else drag = null; } });
+document.addEventListener('contextmenu', e => { if (drag && drag.touch) e.preventDefault(); });
+
+function activate() {
+  const el = drag.el, r = el.getBoundingClientRect();
+  drag.active = true; drag.offX = drag.sx - r.left; drag.offY = drag.sy - r.top;
+  drag.fromStage = el.parentElement.dataset.stage; drag.fromPerson = el.parentElement.dataset.person;
+  drag.fromIndex = Array.from(el.parentElement.querySelectorAll('.card')).indexOf(el);
+  const g = el.cloneNode(true); g.classList.add('ghost'); g.style.width = r.width + 'px'; g.style.left = '0'; g.style.top = '0';
+  document.body.appendChild(g); drag.ghost = g;
+  const ph = document.createElement('div'); ph.className = 'placeholder'; ph.style.height = r.height + 'px';
+  el.parentElement.insertBefore(ph, el); drag.ph = ph;
+  el.classList.add('dragging'); document.body.classList.add('is-dragging');
+  moveTo(drag.x, drag.y);
+  drag.scroller = setInterval(autoScroll, 16);
+}
+
+function moveTo(x, y) {
+  drag.ghost.style.transform = `translate(${x - drag.offX}px, ${y - drag.offY}px) rotate(2deg)`;
+  const under = document.elementFromPoint(x, y);
+  const cards = under && under.closest('.cards');
+  drag.board = under && under.closest('.board');
+  if (!cards) return;
+  const list = Array.from(cards.querySelectorAll('.card:not(.dragging)'));
+  const before = list.find(c => { const r = c.getBoundingClientRect(); return y < r.top + r.height / 2; });
+  const empty = cards.querySelector('.empty'); if (empty) empty.style.display = 'none';
+  if (before) cards.insertBefore(drag.ph, before); else cards.appendChild(drag.ph);
+  document.querySelectorAll('.cards').forEach(c => { if (c !== cards) { const em = c.querySelector('.empty'); if (em && !c.querySelector('.card:not(.dragging), .placeholder')) em.style.display = ''; } });
+}
+
+function autoScroll() {
+  if (!drag || !drag.active) return;
+  const edge = 60, sp = 14;
+  if (drag.y < edge) window.scrollBy(0, -sp); else if (drag.y > window.innerHeight - edge) window.scrollBy(0, sp);
+  if (drag.board) {
+    const r = drag.board.getBoundingClientRect();
+    if (drag.x < r.left + 40) drag.board.scrollLeft -= sp; else if (drag.x > r.right - 40) drag.board.scrollLeft += sp;
+  }
+}
+
+function cleanupDrag() {
+  clearInterval(drag.scroller);
+  if (drag.ghost) drag.ghost.remove();
+  document.body.classList.remove('is-dragging');
+  suppressClick = true; setTimeout(() => { suppressClick = false; }, 60);
+}
+function cancelDrag() { cleanupDrag(); drag = null; render(); }
+
+async function finish() {
+  const d = drag;
+  if (!d.active) { drag = null; return; }
+  cleanupDrag(); drag = null;
+  const cards = d.ph.parentElement;
+  const stage = cards.dataset.stage, person = cards.dataset.person;
+  const order = Array.from(cards.children).filter(c => c === d.ph || (c.classList.contains('card') && c !== d.el)).map(c => c === d.ph ? d.id : c.dataset.id);
+  const idx = order.indexOf(d.id);
+  if (stage === d.fromStage && person === d.fromPerson && idx === d.fromIndex) return render();
+  const t = S.data.tasks.find(x => x.id === d.id); if (!t) return render();
+  render();   // сначала возвращаем как было, применим после ответа в окошке
+  let extra = {};
+  if (stage !== t.stage && (stage === 'dated' || stage === 'work' || stage === 'fail')) {
+    extra = await askDrop(t, stage);
+    if (!extra) return;   // отмена — карточка остаётся на месте
+  }
+  const n = Object.assign({}, t, extra, { stage: stage, person: person });
+  if (stage !== 'fail') n.reason = '';
+  order.forEach((id, i) => { const x = S.data.tasks.find(y => y.id === id); if (x) x.pos = String(i + 1); });
+  n.pos = String(idx + 1);
+  saveTask(n, false, order);
+  if (person !== t.person) toast('Задача передана: ' + person + ' ' + personOf(person).emoji);
+}
+
+// ===================== Запуск =====================
+window.addEventListener('online', () => flush());
+setInterval(() => { if (S.queue.length && !flushing) flush(); }, 30000);
+if (!S.token) showLogin();
+else { if (S.data) render(); flush().then(() => reload()); }
+</script>
+</body>
+</html>
